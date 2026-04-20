@@ -1,0 +1,3 @@
+- [ ] Add DB for persistence
+- [ ] Group the release thread branches list into FE and BE
+- [ ] 

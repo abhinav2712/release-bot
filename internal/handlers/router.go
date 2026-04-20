@@ -111,6 +111,11 @@ func (h *Handler) handleMessageComponent(s *discordgo.Session, i *discordgo.Inte
 			discord.UpdateMessage(s, i, "Could not determine branch to update.", nil)
 			return
 		}
+		// "Remove from Release" skips the modal — handled directly.
+		if values[0] == "removed" {
+			h.handleRemoveFromRelease(s, i, parts[1])
+			return
+		}
 		h.openReleaseUpdateModal(s, i, parts[1], values[0])
 	}
 }

@@ -11,6 +11,7 @@ PMs initialize a release, developers add and update their branches, and the bot 
 - 📋 Create release threads with one command
 - ➕ Add branch entries with status, PR link, and blockers
 - ✏️ Update your own entries via guided dropdowns
+- ❌ Remove a branch from the release (shown struck-through in the thread, excluded from summary counts)
 - 📊 Instant ephemeral summary of release status
 - 🔒 Thread-safe in-memory state
 
@@ -23,8 +24,8 @@ PMs initialize a release, developers add and update their branches, and the bot 
 | `/ping` | Anyone | Health check — responds `Pong 🚀` |
 | `/release-init` | PM | Starts a new release (type → date → notes → thread) |
 | `/release-add` | Developer | Adds a branch entry to the active release |
-| `/release-update` | Developer | Updates one of your existing branch entries |
-| `/release-summary` | Anyone | Shows an ephemeral count snapshot by status |
+| `/release-update` | Developer | Updates a branch entry — or removes it from the release |
+| `/release-summary` | Anyone | Shows an ephemeral count snapshot by status (removed entries excluded) |
 
 ---
 
@@ -158,11 +159,11 @@ Developers run /release-add
 Developers run /release-update
   └─ select their branch
   └─ select new status
-  └─ optionally update PR / blocker
-  └─ summary message updates automatically
+        ├─ normal status → fill in updated PR / blocker in modal → summary updates
+        └─ "Remove from Release" → no modal, branch instantly struck through in thread
 
 Anyone runs /release-summary
-  └─ receives an ephemeral count breakdown
+  └─ receives an ephemeral count breakdown (removed branches excluded)
 ```
 
 ---
@@ -197,6 +198,10 @@ release-bot/
 | `reviewed` | ✅ | Review is complete |
 | `tested` | 🧪 | Testing is complete |
 | `reviewed-and-tested` | 🚀 | Ready to ship |
+| `removed` | ❌ | Removed from the release — struck-through in thread, excluded from counts |
+
+> [!NOTE]
+> The `removed` status is only available via `/release-update`. It cannot be set when first adding an entry with `/release-add`.
 
 ---
 

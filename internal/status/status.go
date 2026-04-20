@@ -30,6 +30,8 @@ func Emoji(s string) string {
 		return "🧪"
 	case "reviewed-and-tested":
 		return "🚀"
+	case "removed":
+		return "❌"
 	default:
 		return "•"
 	}
@@ -48,9 +50,24 @@ func Humanize(s string) string {
 		return "Tested"
 	case "reviewed-and-tested":
 		return "Reviewed and Tested"
+	case "removed":
+		return "Removed"
 	default:
 		return s
 	}
+}
+
+// BuildUpdateStatusOptions returns status options for /release-update, including the
+// "Remove from Release" option that is not available when first adding an entry.
+func BuildUpdateStatusOptions() []discordgo.SelectMenuOption {
+	opts := BuildStatusOptions()
+	opts = append(opts, discordgo.SelectMenuOption{
+		Label:       "Remove from Release",
+		Value:       "removed",
+		Description: "Mark this branch as removed from the release",
+		Emoji:       &discordgo.ComponentEmoji{Name: "❌"},
+	})
+	return opts
 }
 
 // BuildReleaseDateOptions returns today + next 7 days as dropdown options (DD-MM-YYYY).

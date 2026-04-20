@@ -71,7 +71,7 @@ func (h *Handler) openReleaseUpdateStatusSelector(s *discordgo.Session, i *disco
 						discordgo.SelectMenu{
 							CustomID:    "release_update_status_select|" + branch,
 							Placeholder: "Choose new status",
-							Options:     status.BuildStatusOptions(),
+							Options:     status.BuildUpdateStatusOptions(),
 						},
 					},
 				},
@@ -126,4 +126,18 @@ func (h *Handler) handleReleaseUpdateModal(s *discordgo.Session, i *discordgo.In
 	r := h.store.Get()
 	summary.Update(s, &r)
 	discord.Message(s, i, fmt.Sprintf("✅ Updated `%s` successfully.", branch), true)
+}
+
+// handleRemoveFromRelease marks a branch as removed directly from the status selector,
+// skipping the modal entirely since no extra fields are needed.
+func (h *Handler) handleRemoveFromRelease(s *discordgo.Session, i *discordgo.InteractionCreate, branch string) {
+	found := h.store.UpdateItem(i.Member.User.ID, i.Member.User.Username, branch, "removed", "", "")
+	if !found {
+		discord.UpdateMessage(s, i, "❌ No matching branch found for you in the current release.", nil)
+		return
+	}
+
+	r := h.store.Get()
+	summary.Update(s, &r)
+	discord.UpdateMessage(s, i, fmt.Sprintf("❌ `%s` has been removed from the release.", branch), nil)
 }

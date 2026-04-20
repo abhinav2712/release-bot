@@ -32,6 +32,15 @@ func BuildContent(r *models.CurrentRelease) string {
 		content += "_No entries yet_"
 	} else {
 		for _, item := range r.Items {
+			if item.Status == "removed" {
+				// Render removed entries with strikethrough — visually struck out, no detail lines.
+				content += fmt.Sprintf(
+					"- ❌ ~~<@%s> — `%s`~~ *(removed)*\n\n",
+					item.DeveloperID,
+					item.Branch,
+				)
+				continue
+			}
 			content += fmt.Sprintf(
 				"- %s <@%s> — `%s`\n",
 				status.Emoji(item.Status),

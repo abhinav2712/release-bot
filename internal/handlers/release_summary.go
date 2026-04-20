@@ -13,14 +13,19 @@ func (h *Handler) handleReleaseSummary(s *discordgo.Session, i *discordgo.Intera
 	r := h.store.Get()
 
 	counts := map[string]int{
-		"in-progress":          0,
-		"given-for-review":     0,
-		"reviewed":             0,
-		"tested":               0,
-		"reviewed-and-tested":  0,
+		"in-progress":         0,
+		"given-for-review":    0,
+		"reviewed":            0,
+		"tested":              0,
+		"reviewed-and-tested": 0,
 	}
+	activeCount := 0
 	for _, item := range r.Items {
+		if item.Status == "removed" {
+			continue // excluded from all counts
+		}
 		counts[item.Status]++
+		activeCount++
 	}
 
 	content := fmt.Sprintf(
@@ -34,7 +39,7 @@ func (h *Handler) handleReleaseSummary(s *discordgo.Session, i *discordgo.Intera
 			"%s Reviewed and Tested: **%d**",
 		caser.String(r.ReleaseType),
 		r.ReleaseDate,
-		len(r.Items),
+		activeCount,
 		status.Emoji("in-progress"), counts["in-progress"],
 		status.Emoji("given-for-review"), counts["given-for-review"],
 		status.Emoji("reviewed"), counts["reviewed"],
