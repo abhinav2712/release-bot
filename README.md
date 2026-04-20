@@ -9,7 +9,7 @@ PMs initialize a release, developers add and update their branches, and the bot 
 ## Features
 
 - 📋 Create release threads with one command
-- ➕ Add branch entries with status, PR link, and blockers
+- ➕ Add branch entries grouped by **Frontend** or **Backend**
 - ✏️ Update your own entries via guided dropdowns
 - ❌ Remove a branch from the release (shown struck-through in the thread, excluded from summary counts)
 - 📊 Instant ephemeral summary of release status
@@ -23,7 +23,7 @@ PMs initialize a release, developers add and update their branches, and the bot 
 |---|---|---|
 | `/ping` | Anyone | Health check — responds `Pong 🚀` |
 | `/release-init` | PM | Starts a new release (type → date → notes → thread) |
-| `/release-add` | Developer | Adds a branch entry to the active release |
+| `/release-add` | Developer | Adds a branch entry — choose **Frontend** or **Backend** first, then status |
 | `/release-update` | Developer | Updates a branch entry — or removes it from the release |
 | `/release-summary` | Anyone | Shows an ephemeral count snapshot by status (removed entries excluded) |
 
@@ -152,9 +152,10 @@ PM runs /release-init
   └─ bot creates a thread + posts a live summary message
 
 Developers run /release-add
-  └─ select a status
-  └─ fill in branch, title, PR link, blocker
-  └─ summary message updates automatically
+  └─ choose layer (Frontend / Backend)
+  └─ select status
+  └─ fill in branch, title, PR link, blocker in modal
+  └─ summary thread updates with FE / BE grouping
 
 Developers run /release-update
   └─ select their branch

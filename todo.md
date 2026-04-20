@@ -1,3 +1,4 @@
 - [ ] Add DB for persistence
-- [ ] Group the release thread branches list into FE and BE
-- [ ] 
+- [x] Group the release thread branches list into FE and BE
+- [ ] Do something about `release/abc` branches which are being created
+- [ ] Automate adding branches the moment user targets any branch to release branch

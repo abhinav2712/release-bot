@@ -107,7 +107,7 @@ func (h *Handler) handleReleaseInitModal(s *discordgo.Session, i *discordgo.Inte
 
 func (h *Handler) createReleaseThread(s *discordgo.Session, i *discordgo.InteractionCreate, releaseType, releaseDate, releaseNotes string) {
 	channelID := i.ChannelID
-	threadName := fmt.Sprintf("%s-release-%s", releaseType, releaseDate)
+	threadName := fmt.Sprintf("%s Release - %s", caser.String(releaseType), status.FormatDate(releaseDate))
 
 	msg, err := s.ChannelMessageSend(channelID, "Initializing release...")
 	if err != nil {
@@ -141,7 +141,7 @@ func (h *Handler) createReleaseThread(s *discordgo.Session, i *discordgo.Interac
 	err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
-			Content: fmt.Sprintf("✅ %s release created for %s: <#%s>", caser.String(releaseType), releaseDate, thread.ID),
+			Content: fmt.Sprintf("✅ %s release created for %s: <#%s>", caser.String(releaseType), status.FormatDate(releaseDate), thread.ID),
 			Flags:   discord.EphemeralFlag,
 		},
 	})

@@ -43,7 +43,7 @@ func (h *Handler) handleApplicationCommand(s *discordgo.Session, i *discordgo.In
 			discord.Message(s, i, "No active release found. Run /release-init first.", true)
 			return
 		}
-		h.openReleaseAddStatusSelector(s, i)
+		h.openReleaseAddLayerSelector(s, i)
 	case "release-update":
 		if !h.store.IsActive() {
 			discord.Message(s, i, "No active release found. Run /release-init first.", true)
@@ -84,13 +84,26 @@ func (h *Handler) handleMessageComponent(s *discordgo.Session, i *discordgo.Inte
 		}
 		h.openReleaseNotesModal(s, i, parts[1], values[0])
 
-	case customID == "release_add_status_select":
+	case customID == "release_add_layer_select":
+		values := i.MessageComponentData().Values
+		if len(values) == 0 {
+			discord.UpdateMessage(s, i, "No layer selected.", nil)
+			return
+		}
+		h.openReleaseAddStatusSelector(s, i, values[0])
+
+	case strings.HasPrefix(customID, "release_add_status_select|"):
 		values := i.MessageComponentData().Values
 		if len(values) == 0 {
 			discord.UpdateMessage(s, i, "No status selected.", nil)
 			return
 		}
-		h.openReleaseAddModal(s, i, values[0])
+		parts := strings.SplitN(customID, "|", 2)
+		if len(parts) != 2 {
+			discord.UpdateMessage(s, i, "Could not determine layer.", nil)
+			return
+		}
+		h.openReleaseAddModal(s, i, parts[1], values[0])
 
 	case customID == "release_update_branch_select":
 		values := i.MessageComponentData().Values

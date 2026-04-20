@@ -38,7 +38,7 @@ func (h *Handler) handleReleaseSummary(s *discordgo.Session, i *discordgo.Intera
 			"%s Tested: **%d**\n"+
 			"%s Reviewed and Tested: **%d**",
 		caser.String(r.ReleaseType),
-		r.ReleaseDate,
+		status.FormatDate(r.ReleaseDate),
 		activeCount,
 		status.Emoji("in-progress"), counts["in-progress"],
 		status.Emoji("given-for-review"), counts["given-for-review"],

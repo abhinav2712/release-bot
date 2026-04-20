@@ -1,6 +1,7 @@
 package status
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
@@ -99,4 +100,32 @@ func Truncate(text string, max int) string {
 		return text[:max]
 	}
 	return text[:max-3] + "..."
+}
+
+// FormatDate converts a DD-MM-YYYY date string to a human-readable ordinal format,
+// e.g. "23-04-2026" → "23rd April 2026". Falls back to the raw string on parse error.
+func FormatDate(dateStr string) string {
+	t, err := time.Parse("02-01-2006", dateStr)
+	if err != nil {
+		return dateStr
+	}
+	return fmt.Sprintf("%d%s %s %d", t.Day(), ordinalSuffix(t.Day()), t.Format("January"), t.Year())
+}
+
+func ordinalSuffix(day int) string {
+	// 11th, 12th, 13th are exceptions to the normal suffix rules.
+	switch day {
+	case 11, 12, 13:
+		return "th"
+	}
+	switch day % 10 {
+	case 1:
+		return "st"
+	case 2:
+		return "nd"
+	case 3:
+		return "rd"
+	default:
+		return "th"
+	}
 }

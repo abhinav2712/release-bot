@@ -4,6 +4,7 @@ package models
 type ReleaseItem struct {
 	DeveloperID   string
 	DeveloperName string
+	Layer         string // "frontend" or "backend"
 	Branch        string
 	Title         string
 	Status        string
